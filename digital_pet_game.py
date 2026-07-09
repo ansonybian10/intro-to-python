@@ -107,7 +107,7 @@ for turn in range(1, 6):
         if pet_type.lower() == "cat":
             health += 10
 
-     if hunger > 100:
+    if hunger > 100:
         hunger = 100
     elif hunger < 0:
         hunger = 0
