@@ -1,10 +1,10 @@
 import random
  
 Difficulties = {
-    "1": ("Easy", 1, 10, 7),
-    "2": ("Medium", 1, 50, 10),
-    "3": ("Hard", 1, 100, 12),
-    "4": ("Impossible", 1, 500, 9)
+    "1": ("Easy", 1, 10, 5),
+    "2": ("Medium", 1, 50, 7),
+    "3": ("Hard", 1, 100, 9),
+    "4": ("Impossible", 1, 500, 8)
 }
  
 # tracks stats for the current run of the program
@@ -34,17 +34,16 @@ class GuessingGame:
             try:
                 guess = int(raw_guess)
             except ValueError:
-                print("That's not a valid number. Try again.")
+                print("That's not even a number, try again.")
                 continue
  
             if guess < self.min_num or guess > self.max_num:
-                print(f"Guess must be between {self.min_num} and {self.max_num}.")
+                print(f"You're guess has to be between {self.min_num} and {self.max_num}.")
                 continue
  
             return guess
  
     def play(self):
-        """Runs the game loop. Returns True if the player won, False if not."""
         print(f"\nStarting {self.name} mode! Guess the number between "
               f"{self.min_num} and {self.max_num}.")
         print(f"You have {self.max_attempts} attempts. Good luck!\n")
@@ -53,16 +52,16 @@ class GuessingGame:
             guess = self.get_valid_guess()
  
             if guess in self.guessed_numbers:
-                print("You already guessed that number. Try a different one.\n")
+                print("You already guessed that number, try a different one.\n")
                 continue
  
             self.guessed_numbers.add(guess)
             self.attempts += 1
  
             if guess < self.target:
-                print("Too low!\n")
+                print("Higher!\n")
             elif guess > self.target:
-                print("Too high!\n")
+                print("Lower!\n")
             else:
                 print(f"Correct! You got it in {self.attempts} attempts.\n")
                 return True
@@ -74,10 +73,10 @@ class GuessingGame:
 def get_difficulty():
     ## ask the user to pick a difficulty, game (obviously) gets harder as difficulty increases
     print("Choose a difficulty:")
-    print("1. Easy (1-10, 7 attempts)")
-    print("2. Medium (1-50, 10 attempts)")
-    print("3. Hard (1-100, 12 attempts)")
-    print("4. Impossible (1-500, 9 attempts)")
+    print("1. Easy (1-10, 5 attempts)")
+    print("2. Medium (1-50, 7 attempts)")
+    print("3. Hard (1-100, 9 attempts)")
+    print("4. Impossible (1-500, 8 attempts)")
  
     while True:
         choice = input("Enter choice (1-4): ")
@@ -87,7 +86,6 @@ def get_difficulty():
  
  
 def save_score(difficulty, won, attempts):
-    """Update the session stats after a game finishes."""
     session_stats[difficulty]["games"] += 1
  
     if won:
@@ -98,7 +96,6 @@ def save_score(difficulty, won, attempts):
  
  
 def show_stats():
-    """Print out stats for every difficulty from this session."""
     print("\n--- STATS (this session) ---")
     for difficulty, data in session_stats.items():
         games = data["games"]
@@ -113,7 +110,6 @@ def show_stats():
  
  
 def play_game():
-    """Handles picking a difficulty, playing the game, and saving the result."""
     name, min_num, max_num, max_attempts = get_difficulty()
     game = GuessingGame(name, min_num, max_num, max_attempts)
     won = game.play()
@@ -121,7 +117,6 @@ def play_game():
  
  
 def main_menu():
-    """The main loop of the program."""
     print("Welcome to the Number Guessing Game!")
  
     while True:
