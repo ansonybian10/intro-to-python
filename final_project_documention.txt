@@ -1,0 +1,30 @@
+Final Project Documentation
+
+My program is a number guessing game. The program picks a random number from a number range, and the player has to guess it within 
+a limited number of attempts. There are four difficulty levels (easy, medium, hard, impossible), each with a different number range
+and attempt limit. The game also tracks stats (games played, wins, win rate, best score) for the current session.
+
+How to run the program:
+1. Type "python guessing_game_gui.py" into the terminal, and press "enter".
+2. When prompted, pick a difficulty, from easy to impossible. Each difficulty has its own number range and attempt limit.
+3. Then, press "Start Game" to begin the game.
+4. Once the game starts, type in the number you want to guess. If your guess is lower than the number, it will tell you so. If it 
+is higher than the number, it will tell you that too. At the end of each attempt, it will tell you how many attempts are remaining.
+If your guess is correct, it will display a "correct!" screen, as well as how many attempts it took you to guess the correct 
+number. If your guess is wrong, keep guessing until you guess correctly or you run out of attempts.
+5. After the game ends you can return to the menu and play again, check your stats, or quit by closing the window.
+
+Key Features:
+1. 4 difficulty levels with different number ranges and attempt limits (Easy: 1-10, Medium: 1-50, Hard: 1-100, Impossible: 1-500).
+2. Input validation, the game won't crash if you type letters or an out-of-range number, it just asks you to try again.
+3. Guessing the same number twice doesn't cost another attempt.
+4. A GuessingGame class keeps track of everything needed for one game, including the random number, guesses, and attempts.
+5. Session stats (games played, wins, win rate, best score) shown in stats menu.
+6. A GUI that makes the game playable in a separate window, instead of just in the terminal.
+
+Challenges I faced:
+Originally, I planned on saving stats to some external file, specifically a JSON file so they'd carry over from runs, even if the 
+session ended. However, I hadn't learned that yet, so I decided not to. Instead, I just saved the stats from one session only. I 
+also had to decide how many attempts to give for each difficulty. I based most of the attempt limits on the minimum number of 
+guesses needed using a binary search strategy, but I made the Impossible difficulty a little harder by giving one fewer attempt. 
+Then, the GUI was pretty hard to make. I had to search up various youtube tutorials until I finally figuerd it out.

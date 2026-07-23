@@ -1,140 +1,144 @@
 import random
- 
-Difficulties = {
+
+difficulties = {
     "1": ("Easy", 1, 10, 5),
     "2": ("Medium", 1, 50, 7),
     "3": ("Hard", 1, 100, 9),
     "4": ("Impossible", 1, 500, 8)
 }
- 
-# tracks stats for the current run of the program
-session_stats = {
+
+stats = {
     "Easy": {"games": 0, "wins": 0, "best": None},
     "Medium": {"games": 0, "wins": 0, "best": None},
     "Hard": {"games": 0, "wins": 0, "best": None},
     "Impossible": {"games": 0, "wins": 0, "best": None}
 }
- 
- 
+
+
 class GuessingGame:
- 
-    def __init__(self, name, min_num, max_num, max_attempts):
-        self.name = name
-        self.min_num = min_num
-        self.max_num = max_num
-        self.max_attempts = max_attempts
-        self.target = random.randint(min_num, max_num)
-        self.attempts = 0
-        self.guessed_numbers = set()
- 
-    def get_valid_guess(self):
-        """Ask the user for a guess until they give a valid one."""
-        while True:
-            raw_guess = input(f"Guess a number ({self.min_num}-{self.max_num}): ")
-            try:
-                guess = int(raw_guess)
-            except ValueError:
-                print("That's not even a number, try again.")
-                continue
- 
-            if guess < self.min_num or guess > self.max_num:
-                print(f"You're guess has to be between {self.min_num} and {self.max_num}.")
-                continue
- 
-            return guess
- 
+
+    def __init__(self, difficulty, low, high, attempts):
+        self.difficulty = difficulty
+        self.low = low
+        self.high = high
+        self.max_attempts = attempts
+        self.num = random.randint(low, high)
+        self.tries = 0
+        self.used = set()
+
     def play(self):
-        print(f"\nStarting {self.name} mode! Guess the number between "
-              f"{self.min_num} and {self.max_num}.")
-        print(f"You have {self.max_attempts} attempts. Good luck!\n")
- 
-        while self.attempts < self.max_attempts:
-            guess = self.get_valid_guess()
- 
-            if guess in self.guessed_numbers:
-                print("You already guessed that number, try a different one.\n")
-                continue
- 
-            self.guessed_numbers.add(guess)
-            self.attempts += 1
- 
-            if guess < self.target:
-                print("Higher!\n")
-            elif guess > self.target:
-                print("Lower!\n")
-            else:
-                print(f"Correct! You got it in {self.attempts} attempts.\n")
+        print(f"\n{self.difficulty} Mode")
+        print(f"Guess a number from {self.low} to {self.high}")
+        print(f"You get {self.max_attempts} guesses.\n")
+
+        while self.tries < self.max_attempts:
+
+            while True:
+                guess = input("Your guess: ")
+
+                try:
+                    guess = int(guess)
+                except ValueError:
+                    print("Enter a number.")
+                    continue
+
+                if guess < self.low or guess > self.high:
+                    print("That number isn't in the range.")
+                    continue
+
+                if guess in self.used:
+                    print("You already guessed that.")
+                    continue
+
+                break
+
+            self.used.add(guess)
+            self.tries += 1
+
+            if guess == self.num:
+                print(f"You got it in {self.tries} guesses! Nice job.\n")
                 return True
- 
-        print(f"Game over, you ran out of attempts! The number was {self.target}.\n")
+
+            elif guess < self.num:
+                print("Higher!\n")
+
+            else:
+                print("Lower!\n")
+
+        print(f"You lost. The number was {self.num}.\n")
         return False
- 
- 
-def get_difficulty():
-    ## ask the user to pick a difficulty, game (obviously) gets harder as difficulty increases
+
+
+def choose_difficulty():
     print("Choose a difficulty:")
     print("1. Easy (1-10, 5 attempts)")
     print("2. Medium (1-50, 7 attempts)")
     print("3. Hard (1-100, 9 attempts)")
     print("4. Impossible (1-500, 8 attempts)")
- 
+
     while True:
         choice = input("Enter choice (1-4): ")
-        if choice in Difficulties:
-            return Difficulties[choice]
-        print("Invalid choice. Please enter a number from 1 to 4.")
- 
- 
-def save_score(difficulty, won, attempts):
-    session_stats[difficulty]["games"] += 1
- 
-    if won:
-        session_stats[difficulty]["wins"] += 1
-        current_best = session_stats[difficulty]["best"]
-        if current_best is None or attempts < current_best:
-            session_stats[difficulty]["best"] = attempts
- 
- 
+
+        if choice in difficulties:
+            return difficulties[choice]
+
+        print("Pick a number from 1-4.")
+
+
 def show_stats():
-    print("\n--- STATS (this session) ---")
-    for difficulty, data in session_stats.items():
-        games = data["games"]
-        wins = data["wins"]
-        best = data["best"] if data["best"] is not None else "N/A"
- 
-        win_rate = (wins / games * 100) if games > 0 else 0
- 
-        print(f"{difficulty}: {games} games played, {wins} wins, "
-              f"{win_rate:.0f}% win rate, best score: {best} attempts")
-    print()
- 
- 
-def play_game():
-    name, min_num, max_num, max_attempts = get_difficulty()
-    game = GuessingGame(name, min_num, max_num, max_attempts)
-    won = game.play()
-    save_score(name, won, game.attempts)
- 
- 
-def main_menu():
-    print("Welcome to the Number Guessing Game!")
- 
-    while True:
-        print("\n1. Play Game")
-        print("2. View Stats")
-        print("3. Quit")
-        choice = input("Choose an option (1-3): ")
- 
-        if choice == "1":
-            play_game()
-        elif choice == "2":
-            show_stats()
-        elif choice == "3":
-            print("Thanks for playing! Goodbye.")
-            break
+    print("\nSession Stats")
+
+    for level in stats:
+        games = stats[level]["games"]
+        wins = stats[level]["wins"]
+
+        if games == 0:
+            rate = 0
         else:
-            print("Invalid choice. Please enter 1, 2, or 3.")
- 
- 
-if __name__ == "__main__":
-    main_menu()
+            rate = wins / games * 100
+
+        if stats[level]["best"] is None:
+            best = "N/A"
+        else:
+            best = stats[level]["best"]
+
+        print(f"{level}:")
+        print(f" Games: {games}")
+        print(f" Wins: {wins}")
+        print(f" Win Rate: {rate:.0f}%")
+        print(f" Best: {best}")
+        print()
+
+
+print("Welcome to the Number Guessing Game!")
+
+while True:
+    print("1. Play")
+    print("2. View Stats")
+    print("3. Quit")
+
+    choice = input("Choose: ")
+
+    if choice == "1":
+        difficulty, low, high, attempts = choose_difficulty()
+
+        game = GuessingGame(difficulty, low, high, attempts)
+        won = game.play()
+
+        stats[difficulty]["games"] += 1
+
+        if won:
+            stats[difficulty]["wins"] += 1
+
+            if stats[difficulty]["best"] is None or game.tries < stats[difficulty]["best"]:
+                stats[difficulty]["best"] = game.tries
+
+    elif choice == "2":
+        show_stats()
+
+    elif choice == "3":
+        print("Thanks for playing!")
+        break
+
+    else:
+        print("Invalid choice.")
