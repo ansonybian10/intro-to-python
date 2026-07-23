@@ -27,4 +27,6 @@ Originally, I planned on saving stats to some external file, specifically a JSON
 session ended. However, I hadn't learned that yet, so I decided not to. Instead, I just saved the stats from one session only. I 
 also had to decide how many attempts to give for each difficulty. I based most of the attempt limits on the minimum number of 
 guesses needed using a binary search strategy, but I made the Impossible difficulty a little harder by giving one fewer attempt. 
-Then, the GUI was pretty hard to make. I had to search up various youtube tutorials until I finally figuerd it out.
+Then, the GUI was pretty hard to make. I had to search up various youtube tutorials until I finally figuerd it out. Later, I 
+realized that the window and font were too small. So, I searched up some tutorials to find how to change the font size, which, 
+took me a while, but I eventually figured it out.
